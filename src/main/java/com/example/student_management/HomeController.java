@@ -1,4 +1,3 @@
-
 package com.example.student_management;
 
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "redirect:/students";
     }
 }
