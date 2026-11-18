@@ -1,14 +1,20 @@
-# Use Java 21
-FROM eclipse-temurin:21-jre
+# Stage 1: Build application
+FROM maven:3.9-eclipse-temurin-21 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy Spring Boot JAR file
-COPY target/student-management-0.0.1-SNAPSHOT.jar app.jar
+COPY pom.xml .
+COPY src ./src
 
-# Expose application port
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run application
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=build /app/target/student-management-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
 
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
